@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="expense_categories">
+        <item>Education</item>
+        <item>Food and Drink</item>
+        <item>Health</item>
+        <item>Home</item>
+        <item>Personal expenses</item>
+        <item>Pets</item>
+        <item>Recreation</item>
+        <item>Sporadic expenses</item>
+        <item>Taxes</item>
+        <item>Transport</item>
+        <item>Other expenses</item>
+    </string-array>
+</resources>

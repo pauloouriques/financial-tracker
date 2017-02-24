@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#3F51B5</color>
+
+    <color name="pink">#ec4676</color>
+    <color name="pink_dark">#b9355b</color>
+    <color name="pink_darkness">#860228</color>
+
+    <color name="yellow_light">#f9ebac</color>
+    <color name="yellow">#F8A920</color>
+    <color name="yellow_dark">#C58A24</color>
+
+    <color name="orange">#FA602C</color>
+    <color name="orange_button">#ff7a04</color>
+    <color name="orange_dark">#C6481D</color>
+
+    <color name="red_light">#d88c8c</color>
+    <color name="red">#da4848</color>
+    <color name="red_dark">#CA191B</color>
+    <color name="red_ultra_dark">#b25755</color>
+
+    <color name="orange_light">#FFE4B5</color>
+    <color name="orange_regular">#E48C01</color>
+
+    <color name="green">#249188</color>
+    <color name="green_light">#5bc208</color>
+
+    <color name="facebookBlue">#3b5998</color>
+    <color name="purple_light">#7986CB</color>
+
+    <color name="transparent">#00000000</color>
+    <color name="gray_ultra_light">#eeeeee</color>
+    <color name="gray_light">#d8d8d8</color>
+    <color name="gray_regular">#9B9B9B</color>
+    <color name="text_shadow">#7F000000</color>
+    <color name="gray_dark">#606060</color>
+
+    <color name="white">#ffffff</color>
+    <color name="white_transparent">#ddffffff</color>
+    <color name="black">#000000</color>
+    <color name="black_transparent">#bb000000</color>
+    <color name="black_dark_transparent">#dd000000</color>
+</resources>

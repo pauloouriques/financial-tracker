@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">FinancialTracker</string>
+    <string name="action_settings">Settings</string>
+
+    <!--LoginActivity Begin-->
+
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Login</string>
+    <string name="error_invalid_email_or_password">Invalid Email/Password</string>
+    <string name="ld_dialog_loading">Loading...</string>
+    <string name="ld_dialog_please_wait">Please wait.</string>
+
+    <!-- LoginActivity End -->
+
+
+
+    <!--MainActivity Begin-->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="main_search_hint_text">Search</string>
+
+    <!-- MainActivity End -->
+
+
+    <!--AddExpenseActivity Begin-->
+    <string name="description_hint">Description</string>
+    <string name="comment_hint">Comment</string>
+    <string name="add_button_text">Add</string>
+    <string name="expense_value_text">Value</string>
+    <string name="categories_text">Categories:</string>
+    <string name="no_description_text">You must type a description to continue.</string>
+    <!-- AddExpenseActivity End -->
+</resources>
