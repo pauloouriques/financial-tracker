@@ -1,6 +1,7 @@
 package com.toptal.app.financialtracker.login;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,9 +11,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.toptal.app.financialtracker.R;
-import com.toptal.app.financialtracker.entities.User;
 import com.toptal.app.financialtracker.main.MainActivity;
 import com.toptal.app.financialtracker.persistence.PrefsHelper;
 import com.toptal.app.financialtracker.rest.OnTaskListener;
@@ -50,11 +49,9 @@ public class LoginActivity extends Activity {
         findViewById(R.id.email_sign_in_button).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(final View v) {
-                final MaterialDialog progress = new MaterialDialog.Builder(LoginActivity.this)
-                        .title(getString(R.string.ld_dialog_loading))
-                        .content(getString(R.string.ld_dialog_please_wait))
-                        .progress(true, 0)
-                        .show();
+                final ProgressDialog progress = new ProgressDialog(LoginActivity.this);
+                progress.setTitle(R.string.ld_dialog_loading);
+                progress.show();
 
                 View view = getCurrentFocus();
                 if (view != null) {

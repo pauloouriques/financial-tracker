@@ -34,8 +34,8 @@ public class HttpRetrofitClient {
     /**
      * Api url.
      */
-    public static final String API_URL = "http://10.100.100.155:3000"; // Tests
-//    public static final String API_URL = "https://financialtrackerserver.herokuapp.com"; // Tests
+//    public static final String API_URL = "http://10.100.100.155:3000"; // Tests
+    public static final String API_URL = "https://financialtrackerserver.herokuapp.com"; // Tests
     /**
      * Rest Adapter.
      */
