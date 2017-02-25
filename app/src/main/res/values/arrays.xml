@@ -13,4 +13,19 @@
         <item>Transport</item>
         <item>Other expenses</item>
     </string-array>
+
+    <string-array name="expense_categories_icons">
+        <item>@drawable/ic_education</item>
+        <item>@drawable/ic_food_drink</item>
+        <item>@drawable/ic_health</item>
+        <item>@drawable/ic_home</item>
+        <item>@drawable/ic_personal</item>
+        <item>@drawable/ic_pets</item>
+        <item>@drawable/ic_recreation</item>
+        <item>@drawable/ic_sporadic</item>
+        <item>@drawable/ic_taxes</item>
+        <item>@drawable/ic_transportation</item>
+        <item>@drawable/ic_other</item>
+
+    </string-array>
 </resources>

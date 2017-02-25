@@ -1,6 +1,7 @@
 package com.toptal.app.financialtracker.main;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,20 +14,33 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.toptal.app.financialtracker.R;
 import com.toptal.app.financialtracker.adapters.ExpensesAdapter;
 import com.toptal.app.financialtracker.entities.Expense;
+import com.toptal.app.financialtracker.login.LoginActivity;
+import com.toptal.app.financialtracker.persistence.PrefsHelper;
 import com.toptal.app.financialtracker.rest.OnTaskListener;
 import com.toptal.app.financialtracker.rest.tasks.GetExpensesTask;
 
 import java.util.ArrayList;
 
+import static android.R.attr.id;
+
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private static final int ADD_EXPENSE_REQUEST_CODE = 1201;
     private RecyclerView mExpensesRecyclerView;
@@ -59,9 +73,17 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View header=navigationView.getHeaderView(0);
+        TextView name = (TextView) header.findViewById(R.id.user_name_text_view);
+        name.setText(PrefsHelper.getUser(this).getName());
 
         setupExpensesList();
         getExpenses();
+        setupFilterField();
+
+        findViewById(R.id.clear_search_field).setOnClickListener(this);
+
+
     }
 
     @Override
@@ -87,9 +109,15 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-
-
+        if (id == R.id.action_filter) {
+            View view = findViewById(R.id.main_search_layout);
+            if (view.getVisibility() == View.VISIBLE) {
+                view.setVisibility(View.GONE);
+                ((EditText) findViewById(R.id.main_search_edit_text)).setText("");
+                mExpensesAdapter.clearFilter();
+            } else {
+                view.setVisibility(View.VISIBLE);
+            }
             return true;
         }
 
@@ -99,21 +127,17 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        switch (item.getItemId()) {
+            case R.id.nav_add_expense:
+                startActivityForResult(
+                        new Intent(MainActivity.this, AddExpenseActivity.class),
+                        ADD_EXPENSE_REQUEST_CODE);
+                break;
+            case R.id.nav_exit:
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                PrefsHelper.clearPrefs(this);
+                finish();
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -121,6 +145,17 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.clear_search_field:
+                ((EditText) findViewById(R.id.main_search_edit_text)).setText("");
+                mExpensesAdapter.clearFilter();
+                break;
+
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -144,7 +179,11 @@ public class MainActivity extends AppCompatActivity
 
 
     private void getExpenses() {
-        new GetExpensesTask(this, new OnTaskListener() {
+
+        new GetExpensesTask(
+                this,
+                (ProgressBar) findViewById(R.id.main_progress_bar),
+                new OnTaskListener() {
             @Override
             public void onSuccess(AsyncTask task, Object result) {
                 mExpenses = (ArrayList<Expense>) result;
@@ -156,5 +195,44 @@ public class MainActivity extends AppCompatActivity
 
             }
         }).execute();
+    }
+
+    private void setupFilterField() {
+        EditText searchField = (EditText) findViewById(R.id.main_search_edit_text);
+        searchField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    mExpensesAdapter.getTextFilter().filter(v.getText().toString());
+                    InputMethodManager imm = (InputMethodManager) getSystemService(
+                            Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getWindow().getDecorView().getRootView().getWindowToken(), 0);
+                    return true;
+                }
+                return false;
+            }
+        });
+
+
+        searchField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                mExpensesAdapter.getTextFilter().filter(charSequence.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                final ImageView clear = (ImageView) findViewById(R.id.clear_search_field);
+                if (editable.length() > 0) {
+                    clear.setVisibility(View.VISIBLE);
+                } else {
+                    clear.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 }

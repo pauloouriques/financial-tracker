@@ -4,6 +4,8 @@ package com.toptal.app.financialtracker.rest.tasks;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.toptal.app.financialtracker.entities.Expense;
 import com.toptal.app.financialtracker.rest.ApiError;
@@ -30,15 +32,28 @@ public class GetExpensesTask extends AsyncTask<String, Void, Object> {
      */
     private Context mContext;
 
+    /**
+     * Application context.
+     */
+    private ProgressBar mProgressBar;
 
     /**
      * Constructor method.
      *
      * @param listener - The listener.
      */
-    public GetExpensesTask(final Context context, final OnTaskListener listener) {
+    public GetExpensesTask(final Context context, final ProgressBar progressBar, final OnTaskListener listener) {
         this.mContext = context;
         this.mListener = listener;
+        this.mProgressBar = progressBar;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        if (mProgressBar != null) {
+            mProgressBar.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -61,6 +76,9 @@ public class GetExpensesTask extends AsyncTask<String, Void, Object> {
 
     @Override
     protected void onPostExecute(Object result) {
+        if (mProgressBar != null) {
+            mProgressBar.setVisibility(View.GONE);
+        }
         if (result instanceof ArrayList) {
             Log.w(getClass().getSimpleName(), "onSuccess()");
             if (mListener != null)
@@ -70,5 +88,6 @@ public class GetExpensesTask extends AsyncTask<String, Void, Object> {
             if (mListener != null)
                 mListener.onFailure(this, result);
         }
+
     }
 }

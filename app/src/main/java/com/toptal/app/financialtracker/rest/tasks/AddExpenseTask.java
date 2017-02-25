@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.toptal.app.financialtracker.R;
 import com.toptal.app.financialtracker.entities.Expense;
 import com.toptal.app.financialtracker.rest.ApiError;
 import com.toptal.app.financialtracker.rest.HttpRetrofitClient;
@@ -41,6 +42,7 @@ public class AddExpenseTask extends AsyncTask<Expense, Void, Object> {
     @Override
     protected void onPreExecute() {
         mPDialog = new ProgressDialog(mActivity);
+        mPDialog.setTitle(R.string.ld_dialog_loading);
         mPDialog.show();
     }
 

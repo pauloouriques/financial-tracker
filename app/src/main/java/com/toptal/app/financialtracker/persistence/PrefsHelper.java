@@ -29,7 +29,7 @@ public class PrefsHelper {
      * @param context - The context.
      */
     public static void clearPrefs(Context context){
-        getPreferences(context).edit().putBoolean(Constants.PREFS_SAW_TUTORIAL_KEY, false).commit();
+        clearCookie(context);
         getPreferences(context).edit().putString(Constants.PREFS_USER, Constants.EMPTY_STRING).commit();
     }
 

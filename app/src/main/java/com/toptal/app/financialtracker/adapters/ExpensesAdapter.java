@@ -49,10 +49,11 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        Expense expense = mExpenses.get(position);
+        Expense expense = mFilteredExpenses.get(position);
         holder.expenseDescription.setText(expense.description);
         holder.expenseComment.setText(expense.comment);
         holder.expenseAmount.setText(SharedMethods.formatMonetaryValue(expense.amount));
+        holder.expenseCategoryImage.setImageResource(expense.getExpenseIconResId(mActivity));
         try {
             Date date = Constants.DATE_FORMAT_FROM_SERVER.parse(expense.date);
             holder.expenseDate.setText(Constants.DATE_FORMAT.format(date));
@@ -69,8 +70,7 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.ViewHo
     }
 
 
-    public Filter getTextFilter(final View failFilterLayout) {
-        mFailTextFilterLayout = failFilterLayout;
+    public Filter getTextFilter() {
         return mTextFilter;
     }
 
@@ -151,12 +151,12 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.ViewHo
                 mFilteredExpenses.addAll(mExpenses);
             } else {
                 final String filterPattern = constraint.toString().toLowerCase().trim();
-                for (final Expense transaction : mExpenses) {
-                    if (transaction.description.toLowerCase().contains(filterPattern)) {
-                        mFilteredExpenses.add(transaction);
+                for (final Expense expense : mExpenses) {
+                    if (expense.description.toLowerCase().contains(filterPattern.toLowerCase())) {
+                        mFilteredExpenses.add(expense);
                     }
-                    if (transaction.comment.toLowerCase().contains(filterPattern)) {
-                        mFilteredExpenses.add(transaction);
+                    if (expense.comment.toLowerCase().contains(filterPattern.toLowerCase())) {
+                        mFilteredExpenses.add(expense);
                     }
                 }
             }

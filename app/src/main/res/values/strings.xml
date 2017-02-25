@@ -18,8 +18,9 @@
     <!--MainActivity Begin-->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="main_search_hint_text">Search</string>
-
+    <string name="main_search_hint_text">Filter</string>
+    <string name="drawer_add_expense_text">Add New Expense</string>
+    <string name="drawer_logout_text">Log Out</string>
     <!-- MainActivity End -->
 
 
