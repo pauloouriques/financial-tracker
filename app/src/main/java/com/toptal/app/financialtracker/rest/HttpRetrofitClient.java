@@ -18,7 +18,6 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
@@ -79,7 +78,7 @@ public class HttpRetrofitClient {
 
 
         /**
-         * Method to add event on server.
+         * Method to add a expense.
          *
          * @return created expense.
          */
@@ -88,7 +87,35 @@ public class HttpRetrofitClient {
                 @Body Expense expense
         );
 
+        /**
+         * Method to edit a expense.
+         *
+         * @return edited expense.
+         */
+        @POST("/expense/update")
+        Call<Expense> editExpense(
+                @Body Expense expense
+        );
 
+        /**
+         * Method to remove a expense.
+         *
+         * @return removed expense.
+         */
+        @POST("/expense/remove")
+        Call<Expense> removeExpense(
+                @Body Expense expense
+        );
+
+        /**
+         * Method to add a user.
+         *
+         * @return created user.
+         */
+        @POST("/user/add")
+        Call<User> addUser(
+                @Body User user
+        );
 
     }
 

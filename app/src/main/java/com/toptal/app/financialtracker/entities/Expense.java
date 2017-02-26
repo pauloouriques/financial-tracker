@@ -14,7 +14,7 @@ import java.util.Comparator;
  */
 public class Expense extends BaseEntity {
     @SerializedName("_id")
-    private String id;
+    public String id;
     public String description;
     public Double amount = 0d;
     public String comment;
@@ -24,7 +24,7 @@ public class Expense extends BaseEntity {
     /**
      * Comparator to transactions (sort list)
      */
-    public static class TransactionComparator implements Comparator<Expense> {
+    public static class dateComparator implements Comparator<Expense> {
         public int compare(final Expense expense, final Expense anotherExpense) {
             return expense.date.compareTo(anotherExpense.date);
         }
@@ -43,7 +43,7 @@ public class Expense extends BaseEntity {
     /**
      * Get the corresponding icon res id.
      * @param context app context.
-     * @return the correspondin icon res id.
+     * @return the corresponding icon res id.
      */
     public int getExpenseIconResId(final Context context) {
         String[] categories = context.getResources()
@@ -58,4 +58,20 @@ public class Expense extends BaseEntity {
         return 0;
     }
 
+    /**
+     * Get the corresponding index.
+     * @param context app context.
+     * @return the corresponding index.
+     */
+    public int getCategoryIndex(final Context context) {
+        String[] categories = context.getResources()
+                .getStringArray(R.array.expense_categories);
+
+        for (int i = 0; i < categories.length; i++) {
+            if (this.category.toLowerCase().equals(categories[i].toLowerCase())) {
+                return i;
+            }
+        }
+        return 0;
+    }
 }

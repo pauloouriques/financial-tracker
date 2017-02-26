@@ -10,8 +10,10 @@
     <dimen name="fab_margin">16dp</dimen>
 
     <dimen name="transaction_item_name_text_size">12sp</dimen>
+    <dimen name="activity_large_horizontal_margin">16dp</dimen>
 
     <dimen name="screen_spacer">10dp</dimen>
+    <dimen name="expense_date_icons">22dp</dimen>
     <dimen name="text_spacer">5dp</dimen>
     <dimen name="date_text_size">14sp</dimen>
     <dimen name="line_height">0.5dp</dimen>

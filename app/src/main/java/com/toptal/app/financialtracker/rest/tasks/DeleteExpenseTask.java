@@ -16,7 +16,7 @@ import retrofit2.Response;
 /**
  * This class represents the find user task.
  */
-public class AddExpenseTask extends AsyncTask<Expense, Void, Object> {
+public class DeleteExpenseTask extends AsyncTask<Expense, Void, Object> {
 
     private Activity mActivity;
     private ProgressDialog mPDialog;
@@ -27,7 +27,7 @@ public class AddExpenseTask extends AsyncTask<Expense, Void, Object> {
      *
      * @param listener - Task listener.
      */
-    public AddExpenseTask(Activity activity, OnTaskListener listener) {
+    public DeleteExpenseTask(Activity activity, OnTaskListener listener) {
         this.mActivity = activity;
         this.mListener = listener;
     }
@@ -43,7 +43,7 @@ public class AddExpenseTask extends AsyncTask<Expense, Void, Object> {
         try {
 
             Call<Expense> call;
-            call = new HttpRetrofitClient(mActivity).mClient.addExpense(params[0]);
+            call = new HttpRetrofitClient(mActivity).mClient.removeExpense(params[0]);
             Response<Expense> response = call.execute();
 
             switch (response.code()) {

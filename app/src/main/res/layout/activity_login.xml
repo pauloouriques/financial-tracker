@@ -33,13 +33,21 @@
             android:maxLines="1"
             android:singleLine="true"/>
 
+
         <Button
+            android:layout_marginTop="20dp"
             android:id="@+id/email_sign_in_button"
-            android:layout_width="match_parent"
+            style="@style/AppTheme.RoundedButton"
+            android:text="@string/action_sign_in" />
+
+        <TextView
+            android:layout_marginTop="40dp"
+            android:padding="10dp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/action_sign_in"
-            android:textStyle="bold"/>
+            android:id="@+id/create_account_button"
+            android:text="@string/create_account" />
 
     </LinearLayout>
 

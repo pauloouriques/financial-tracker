@@ -1,5 +1,6 @@
 package com.toptal.app.financialtracker.adapters;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.toptal.app.financialtracker.R;
 import com.toptal.app.financialtracker.entities.Expense;
+import com.toptal.app.financialtracker.main.EditExpenseActivity;
 import com.toptal.app.financialtracker.main.MainActivity;
 import com.toptal.app.financialtracker.utils.Constants;
 import com.toptal.app.financialtracker.utils.SharedMethods;
@@ -27,17 +29,17 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.ViewHo
 
     private ArrayList<Expense> mExpenses = new ArrayList<Expense>();
     private ArrayList<Expense> mFilteredExpenses = new ArrayList<Expense>();
-    private TransactionTextFilter mTextFilter;
+    private ExpenseTextFilter mTextFilter;
 
     private MainActivity mActivity;
     private View mFailTextFilterLayout;
 
     public ExpensesAdapter(final MainActivity activity, final ArrayList<Expense> data) {
-        Collections.sort(data, new Expense.TransactionComparator());
+        Collections.sort(data, new Expense.dateComparator());
         this.mExpenses = data;
         this.mFilteredExpenses.addAll(data);
         mActivity = activity;
-        this.mTextFilter = new TransactionTextFilter();
+        this.mTextFilter = new ExpenseTextFilter();
     }
 
     @Override
@@ -48,7 +50,7 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         Expense expense = mFilteredExpenses.get(position);
         holder.expenseDescription.setText(expense.description);
         holder.expenseComment.setText(expense.comment);
@@ -61,6 +63,18 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.ViewHo
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mActivity, EditExpenseActivity.class);
+                intent.putExtra(
+                        Constants.EXPENSE_TO_EDIT,
+                        mFilteredExpenses.get(position).toJsonString());
+                mActivity.startActivityForResult(
+                        intent,
+                        mActivity.EDIT_EXPENSE_REQUEST_CODE);
+            }
+        });
 
     }
 
@@ -70,9 +84,14 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.ViewHo
     }
 
 
+    /**
+     * Get the text filter.
+     * @return the text filter.
+     */
     public Filter getTextFilter() {
         return mTextFilter;
     }
+
 
     /**
      * Clear filter.
@@ -89,7 +108,7 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.ViewHo
      * UpdateList.
      */
     public void updateList(final ArrayList<Expense> transactions) {
-        Collections.sort(transactions, new Expense.TransactionComparator());
+        Collections.sort(transactions, new Expense.dateComparator());
         mExpenses = transactions;
         mFilteredExpenses.clear();
         mFilteredExpenses.addAll(mExpenses);
@@ -97,11 +116,41 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.ViewHo
     }
 
     /**
+     * UpdateList.
+     */
+    public void updateList(final Expense expense, final boolean delete) {
+        System.out.println(delete + "<<<<<<<<<<<<<<<<<<<<<<<<<");
+        int indexToUpdate = -1;
+        for (int i = 0; i < mFilteredExpenses.size(); i++) {
+            if (mFilteredExpenses.get(i).id.equals(expense.id)) {
+                indexToUpdate = i;
+                break;
+            }
+        }
+        if (indexToUpdate >= 0) {
+            if (delete) {
+                mFilteredExpenses.remove(indexToUpdate);
+            } else {
+                mFilteredExpenses.set(indexToUpdate, expense);
+            }
+        }
+        Collections.sort(mFilteredExpenses, new Expense.dateComparator());
+        notifyDataSetChanged();
+    }
+
+    /**
+     * UpdateList.
+     */
+    public void updateList(final Expense expense) {
+        updateList(expense, false);
+    }
+
+    /**
      * Order list by older transactions.
      */
     public void orderByOlder() {
-        Collections.sort(mFilteredExpenses, new Expense.TransactionComparator());
-        Collections.sort(mExpenses, new Expense.TransactionComparator());
+        Collections.sort(mFilteredExpenses, new Expense.dateComparator());
+        Collections.sort(mExpenses, new Expense.dateComparator());
         notifyDataSetChanged();
     }
 
@@ -109,8 +158,8 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.ViewHo
      * Order list by recenter transactions.
      */
     public void orderByNewer() {
-        Collections.sort(mFilteredExpenses, new Expense.TransactionComparator());
-        Collections.sort(mExpenses, new Expense.TransactionComparator());
+        Collections.sort(mFilteredExpenses, new Expense.dateComparator());
+        Collections.sort(mExpenses, new Expense.dateComparator());
         Collections.reverse(mFilteredExpenses);
         Collections.reverse(mExpenses);
         notifyDataSetChanged();
@@ -133,6 +182,7 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.ViewHo
             expenseDate = (TextView) itemView.findViewById(R.id.expense_date);
             expenseTime= (TextView) itemView.findViewById(R.id.expense_time);
             expenseCategoryImage = (ImageView) itemView.findViewById(R.id.statement_item_user_pic);
+
         }
     }
 
@@ -140,7 +190,7 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.ViewHo
     /**
      * Class that represents the Expense Filter.
      */
-    private class TransactionTextFilter extends Filter {
+    private class ExpenseTextFilter extends Filter {
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {

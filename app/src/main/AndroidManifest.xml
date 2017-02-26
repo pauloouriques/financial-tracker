@@ -36,6 +36,20 @@
             android:parentActivityName=".main.MainActivity"
             android:screenOrientation="portrait">
         </activity>
+
+        <activity
+            android:name=".main.EditExpenseActivity"
+            android:label="@string/app_name"
+            android:parentActivityName=".main.MainActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".main.AddUserActivity"
+            android:label="@string/app_name"
+            android:parentActivityName=".login.LoginActivity"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>

@@ -7,6 +7,7 @@
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Login</string>
+    <string name="create_account">Create Account</string>
     <string name="error_invalid_email_or_password">Invalid Email/Password</string>
     <string name="ld_dialog_loading">Loading...</string>
     <string name="ld_dialog_please_wait">Please wait.</string>
@@ -32,4 +33,37 @@
     <string name="categories_text">Categories:</string>
     <string name="no_description_text">You must type a description to continue.</string>
     <!-- AddExpenseActivity End -->
+
+
+    <!--EditExpenseActivity Begin-->
+    <string name="delete_expense_text">Remove Expense</string>
+    <string name="edit_expense_text">Edit</string>
+    <string name="delete_expense_dialog_title">Remove Expense</string>
+    <string name="delete_expense_dialog_text">Doing this action you will remove permanently this Expense</string>
+    <!-- EditExpenseActivity End -->
+
+
+    <!--AddUserActivity Begin-->
+    <string name="name_hint">First and Last name</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="password_confirmation_hint">Confirm Password</string>
+    <string name="types_text">User type</string>
+    <string name="no_name_text">You must type the User First and Last name to continue.</string>
+    <string name="no_email_text">You must type the User email to continue.</string>
+    <string name="invalid_email_text">You must type a valid email to continue.</string>
+    <string name="no_password_text">You must type the User Password to continue.</string>
+    <string name="no_password_match_text">Password and Confirmation do not match.</string>
+    <string name="user_added_text">User added successfully.</string>
+    <string name="user_already_exist_text">Sorry. A user with that email address already exists. Please, choose another.</string>
+
+
+    <!-- AddExpenseActivity End -->
+
+    <!--EditUserActivity Begin-->
+    <string name="edit_user_text">Edit</string>
+    <string name="delete_user_text">Remove User</string>
+    <string name="delete_user_dialog_text">Doing this action you will remove permanently this User</string>
+
+    <!-- EditUserActivity End -->
 </resources>

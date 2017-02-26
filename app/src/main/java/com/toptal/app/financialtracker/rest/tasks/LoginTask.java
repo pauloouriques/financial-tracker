@@ -1,26 +1,21 @@
 package com.toptal.app.financialtracker.rest.tasks;
 
 
+import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.toptal.app.financialtracker.entities.Expense;
-import com.toptal.app.financialtracker.entities.LoginResponse;
+import com.toptal.app.financialtracker.R;
+import com.toptal.app.financialtracker.dialogs.ProgressDialog;
 import com.toptal.app.financialtracker.entities.User;
-import com.toptal.app.financialtracker.login.LoginActivity;
-import com.toptal.app.financialtracker.main.MainActivity;
 import com.toptal.app.financialtracker.persistence.PrefsHelper;
 import com.toptal.app.financialtracker.rest.ApiError;
 import com.toptal.app.financialtracker.rest.HttpRetrofitClient;
 import com.toptal.app.financialtracker.rest.OnTaskListener;
 
-import java.util.ArrayList;
-
 import okhttp3.Headers;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 
@@ -31,7 +26,7 @@ public class LoginTask extends AsyncTask<String, Void, Object> {
     /**
      * The context.
      */
-    private Context mContext;
+    private Activity mContext;
 
     /**
      * StatusCallback to use with onTaskFailed or onTaskCompleted.
@@ -39,13 +34,25 @@ public class LoginTask extends AsyncTask<String, Void, Object> {
     private OnTaskListener mListener;
 
     /**
+     * Progress dialog.
+     */
+    private ProgressDialog mPDialog;
+
+    /**
      * Constructor method.
      *
      * @param context - The context.
      */
-    public LoginTask(final Context context, final OnTaskListener listener) {
+    public  LoginTask(final Activity context, final OnTaskListener listener) {
         this.mContext = context;
         this.mListener = listener;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        mPDialog = new ProgressDialog(mContext);
+        mPDialog.show();
     }
 
     @Override
@@ -79,6 +86,7 @@ public class LoginTask extends AsyncTask<String, Void, Object> {
 
     @Override
     protected void onPostExecute(Object result) {
+        mPDialog.dismiss();
         if (result instanceof User) {
             Log.w(getClass().getSimpleName(), "onSuccess()");
             if (mListener != null)

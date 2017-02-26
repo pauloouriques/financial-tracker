@@ -63,4 +63,15 @@ public class Constants {
      * Format iso.
      */
     public static final SimpleDateFormat DATE_FORMAT_FROM_SERVER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
+    /**
+     * Expense to edit.
+     */
+    public static final String EXPENSE_TO_EDIT = "expense_to_edit";
+
+    /**
+     * Expense to edit.
+     */
+    public static final String USER_TO_EDIT = "expense_to_edit";
+
 }

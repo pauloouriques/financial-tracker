@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.toptal.app.financialtracker.R;
 import com.toptal.app.financialtracker.dialogs.ProgressDialog;
 import com.toptal.app.financialtracker.entities.Expense;
+import com.toptal.app.financialtracker.entities.User;
 import com.toptal.app.financialtracker.rest.ApiError;
 import com.toptal.app.financialtracker.rest.HttpRetrofitClient;
 import com.toptal.app.financialtracker.rest.OnTaskListener;
@@ -16,7 +18,7 @@ import retrofit2.Response;
 /**
  * This class represents the find user task.
  */
-public class AddExpenseTask extends AsyncTask<Expense, Void, Object> {
+public class AddUserTask extends AsyncTask<User, Void, Object> {
 
     private Activity mActivity;
     private ProgressDialog mPDialog;
@@ -27,7 +29,7 @@ public class AddExpenseTask extends AsyncTask<Expense, Void, Object> {
      *
      * @param listener - Task listener.
      */
-    public AddExpenseTask(Activity activity, OnTaskListener listener) {
+    public AddUserTask(Activity activity, OnTaskListener listener) {
         this.mActivity = activity;
         this.mListener = listener;
     }
@@ -39,18 +41,20 @@ public class AddExpenseTask extends AsyncTask<Expense, Void, Object> {
     }
 
     @Override
-    protected Object doInBackground(Expense... params) {
+    protected Object doInBackground(User... params) {
         try {
 
-            Call<Expense> call;
-            call = new HttpRetrofitClient(mActivity).mClient.addExpense(params[0]);
-            Response<Expense> response = call.execute();
+            Call<User> call;
+            call = new HttpRetrofitClient(mActivity).mClient.addUser(params[0]);
+            Response<User> response = call.execute();
 
             switch (response.code()) {
                 case 204:
                     return response.body();
                 case 500:
                     return new ApiError(500, response.message());
+                case 409:
+                    return new ApiError(409, mActivity.getString(R.string.user_already_exist_text));
                 default:
                     return response.body();
             }

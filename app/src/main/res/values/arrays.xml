@@ -28,4 +28,10 @@
         <item>@drawable/ic_other</item>
 
     </string-array>
+
+    <string-array name="user_types">
+        <item>USER</item>
+        <item>MANAGER</item>
+        <item>ADMIN</item>
+    </string-array>
 </resources>

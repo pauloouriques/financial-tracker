@@ -37,7 +37,7 @@ import com.toptal.app.financialtracker.rest.tasks.GetExpensesTask;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity
+public class AdminMainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
 
     public static final int ADD_EXPENSE_REQUEST_CODE = 1201;
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 startActivityForResult(
-                        new Intent(MainActivity.this, AddExpenseActivity.class),
+                        new Intent(AdminMainActivity.this, AddExpenseActivity.class),
                         ADD_EXPENSE_REQUEST_CODE);
 
             }
@@ -129,11 +129,11 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.nav_add_expense:
                 startActivityForResult(
-                        new Intent(MainActivity.this, AddExpenseActivity.class),
+                        new Intent(AdminMainActivity.this, AddExpenseActivity.class),
                         ADD_EXPENSE_REQUEST_CODE);
                 break;
             case R.id.nav_exit:
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                startActivity(new Intent(AdminMainActivity.this, LoginActivity.class));
                 PrefsHelper.clearPrefs(this);
                 finish();
                 break;
@@ -176,10 +176,10 @@ public class MainActivity extends AppCompatActivity
 
     private void setupExpensesList() {
         mExpensesRecyclerView = (RecyclerView) findViewById(R.id.expenses_recycler_view);
-        mExpensesRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+        mExpensesRecyclerView.setLayoutManager(new LinearLayoutManager(AdminMainActivity.this));
         mExpensesRecyclerView.setNestedScrollingEnabled(false);
         mExpenses = new ArrayList<>();
-        mExpensesAdapter = new ExpensesAdapter(this, mExpenses);
+//        mExpensesAdapter = new ExpensesAdapter(this, mExpenses);
         mExpensesRecyclerView.setAdapter(mExpensesAdapter);
     }
 

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <EditText
+        android:layout_margin="@dimen/screen_spacer"
+        android:id="@+id/name_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/text_spacer"
+        android:hint="@string/name_hint"
+        android:lines="1"
+        android:backgroundTint="@color/gray_light"
+        android:singleLine="true"
+        android:textColorHint="@color/gray_regular"
+        android:textColor="@color/gray_dark" />
+
+    <EditText
+        android:layout_margin="@dimen/screen_spacer"
+        android:id="@+id/email_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/text_spacer"
+        android:hint="@string/email_hint"
+        android:lines="1"
+        android:inputType="textEmailAddress"
+        android:backgroundTint="@color/gray_light"
+        android:singleLine="true"
+        android:textColorHint="@color/gray_regular"
+        android:textColor="@color/gray_dark" />
+
+
+    <EditText
+        android:layout_margin="@dimen/screen_spacer"
+        android:id="@+id/password_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/text_spacer"
+        android:hint="@string/password_hint"
+        android:lines="1"
+        android:inputType="textPassword"
+        android:backgroundTint="@color/gray_light"
+        android:singleLine="true"
+        android:textColorHint="@color/gray_regular"
+        android:textColor="@color/gray_dark" />
+
+    <EditText
+        android:layout_margin="@dimen/screen_spacer"
+        android:id="@+id/password_confirmation_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/text_spacer"
+        android:hint="@string/password_confirmation_hint"
+        android:lines="1"
+        android:inputType="textPassword"
+        android:backgroundTint="@color/gray_light"
+        android:singleLine="true"
+        android:textColorHint="@color/gray_regular"
+        android:textColor="@color/gray_dark" />
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/user_type_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/screen_spacer"
+        android:background="@drawable/border_shape"
+        android:orientation="horizontal"
+        android:padding="@dimen/screen_spacer"
+        android:weightSum="2">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/types_text"
+            android:textSize="17sp" />
+
+        <Spinner
+            android:id="@+id/types_spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:entries="@array/user_types" />
+    </LinearLayout>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/add_user_button"
+            style="@style/AppTheme.Button"
+            android:layout_gravity="bottom"
+            android:text="@string/add_button_text" />
+    </FrameLayout>
+
+</LinearLayout>
