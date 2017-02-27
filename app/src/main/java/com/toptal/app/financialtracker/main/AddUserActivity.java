@@ -27,7 +27,7 @@ import com.toptal.app.financialtracker.utils.SharedMethods;
  * This class represents the add expense Activity.
  */
 
-public class AddUserActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+public class AddUserActivity extends AppCompatActivity implements View.OnClickListener {
 
 
     @Override
@@ -36,10 +36,9 @@ public class AddUserActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_add_user);
 
         User user = PrefsHelper.getUser(this);
-        if (user != null && user.type == User.TYPE_ADMIN) {
+        if (user != null && user.type.equals(User.TYPE_ADMIN)) {
             Spinner spinner = (Spinner) findViewById(R.id.types_spinner);
-            spinner.setVisibility(View.VISIBLE);
-            spinner.setOnItemSelectedListener(this);
+            findViewById(R.id.user_type_layout).setVisibility(View.VISIBLE);
         }
 
         findViewById(R.id.add_user_button).setOnClickListener(this);
@@ -54,16 +53,6 @@ public class AddUserActivity extends AppCompatActivity implements View.OnClickLi
                 break;
         }
     }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-    }
-
 
 
     private void addUser() {
@@ -89,7 +78,7 @@ public class AddUserActivity extends AppCompatActivity implements View.OnClickLi
             user.password = password.getText().toString();
 
             User loggedUser = PrefsHelper.getUser(this);
-            if (loggedUser != null && loggedUser.type == User.TYPE_ADMIN) {
+            if (loggedUser != null && loggedUser.type.equals(User.TYPE_ADMIN)) {
                 Spinner spinner = (Spinner) findViewById(R.id.types_spinner);
                 user.type = spinner.getSelectedItem().toString().toUpperCase();
             } else {
@@ -100,6 +89,9 @@ public class AddUserActivity extends AppCompatActivity implements View.OnClickLi
                 @Override
                 public void onSuccess(AsyncTask task, Object result) {
                     Toast.makeText(AddUserActivity.this, getString(R.string.user_added_text), Toast.LENGTH_LONG).show();
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra("result", ((User) result).toJsonString());
+                    setResult(Activity.RESULT_OK, returnIntent);
                     finish();
                 }
 

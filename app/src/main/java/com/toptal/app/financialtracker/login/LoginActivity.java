@@ -12,7 +12,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.toptal.app.financialtracker.R;
+import com.toptal.app.financialtracker.entities.User;
 import com.toptal.app.financialtracker.main.AddUserActivity;
+import com.toptal.app.financialtracker.main.AdminMainActivity;
 import com.toptal.app.financialtracker.main.MainActivity;
 import com.toptal.app.financialtracker.persistence.PrefsHelper;
 import com.toptal.app.financialtracker.rest.OnTaskListener;
@@ -33,12 +35,17 @@ public class LoginActivity extends Activity implements OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        //TODO: REMOVE THIS AFTER TESTS
         PrefsHelper.clearCookie(this);
         PrefsHelper.clearPrefs(this);
 
-        if (!PrefsHelper.getCookie(LoginActivity.this).equals("")) {
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-            finish();
+        User user = PrefsHelper.getUser(LoginActivity.this);
+        if (user != null) {
+            if (user.type.equals(User.TYPE_ADMIN) || user.type.equals(User.TYPE_MANAGER)) {
+                startActivity(new Intent(LoginActivity.this, AdminMainActivity.class));
+            } else {
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            }
         }
 
         findViewById(R.id.email_sign_in_button).setOnClickListener(this);
@@ -52,8 +59,8 @@ public class LoginActivity extends Activity implements OnClickListener{
                 final TextView username = (TextView) findViewById(R.id.email);
                 final TextView password = (TextView) findViewById(R.id.password);
 
-                username.setText("a@a.com");
-                password.setText("aaa");
+                username.setText("o@o.com");
+                password.setText("opa");
 
                 if (view != null) {
                     final InputMethodManager imm = (InputMethodManager) getSystemService(
@@ -64,7 +71,12 @@ public class LoginActivity extends Activity implements OnClickListener{
                 new LoginTask(LoginActivity.this, new OnTaskListener() {
                     @Override
                     public void onSuccess(AsyncTask task, Object result) {
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        User user = (User) result;
+                        if (user.type.equals(User.TYPE_ADMIN) || user.type.equals(User.TYPE_MANAGER)) {
+                            startActivity(new Intent(LoginActivity.this, AdminMainActivity.class));
+                        } else {
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        }
                         finish();
                     }
 

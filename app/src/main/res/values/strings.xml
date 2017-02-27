@@ -22,7 +22,14 @@
     <string name="main_search_hint_text">Filter</string>
     <string name="drawer_add_expense_text">Add New Expense</string>
     <string name="drawer_logout_text">Log Out</string>
+    <string name="drawer_account_text">Account</string>
     <!-- MainActivity End -->
+
+
+    <!--AdminMainActivity Begin-->
+    <string name="drawer_add_user_text">Add New User</string>
+
+    <!-- AdminMainActivity End -->
 
 
     <!--AddExpenseActivity Begin-->
@@ -53,6 +60,7 @@
     <string name="no_email_text">You must type the User email to continue.</string>
     <string name="invalid_email_text">You must type a valid email to continue.</string>
     <string name="no_password_text">You must type the User Password to continue.</string>
+    <string name="old_password_error_text">Invalid password.</string>
     <string name="no_password_match_text">Password and Confirmation do not match.</string>
     <string name="user_added_text">User added successfully.</string>
     <string name="user_already_exist_text">Sorry. A user with that email address already exists. Please, choose another.</string>
@@ -63,6 +71,7 @@
     <!--EditUserActivity Begin-->
     <string name="edit_user_text">Edit</string>
     <string name="delete_user_text">Remove User</string>
+    <string name="old_password_hint">Old Password</string>
     <string name="delete_user_dialog_text">Doing this action you will remove permanently this User</string>
 
     <!-- EditUserActivity End -->

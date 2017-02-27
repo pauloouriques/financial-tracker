@@ -28,28 +28,28 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.toptal.app.financialtracker.R;
-import com.toptal.app.financialtracker.adapters.ExpensesAdapter;
-import com.toptal.app.financialtracker.entities.Expense;
+import com.toptal.app.financialtracker.adapters.UsersAdapter;
+import com.toptal.app.financialtracker.entities.User;
 import com.toptal.app.financialtracker.login.LoginActivity;
 import com.toptal.app.financialtracker.persistence.PrefsHelper;
 import com.toptal.app.financialtracker.rest.OnTaskListener;
-import com.toptal.app.financialtracker.rest.tasks.GetExpensesTask;
+import com.toptal.app.financialtracker.rest.tasks.GetUsersTask;
 
 import java.util.ArrayList;
 
 public class AdminMainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
-    public static final int ADD_EXPENSE_REQUEST_CODE = 1201;
-    public static final int EDIT_EXPENSE_REQUEST_CODE = 1202;
+    public static final int ADD_USER_REQUEST_CODE = 1401;
+    public static final int EDIT_USER_REQUEST_CODE = 1402;
     private RecyclerView mExpensesRecyclerView;
-    private ArrayList<Expense> mExpenses;
-    private ExpensesAdapter mExpensesAdapter;
+    private ArrayList<User> mUsers;
+    private UsersAdapter mUserAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_admin_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -58,8 +58,8 @@ public class AdminMainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 startActivityForResult(
-                        new Intent(AdminMainActivity.this, AddExpenseActivity.class),
-                        ADD_EXPENSE_REQUEST_CODE);
+                        new Intent(AdminMainActivity.this, AddUserActivity.class),
+                        ADD_USER_REQUEST_CODE);
 
             }
         });
@@ -72,12 +72,12 @@ public class AdminMainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        View header=navigationView.getHeaderView(0);
+        View header = navigationView.getHeaderView(0);
         TextView name = (TextView) header.findViewById(R.id.user_name_text_view);
         name.setText(PrefsHelper.getUser(this).name);
 
         setupExpensesList();
-        getExpenses();
+        getUsers();
         setupFilterField();
 
         findViewById(R.id.clear_search_field).setOnClickListener(this);
@@ -113,7 +113,7 @@ public class AdminMainActivity extends AppCompatActivity
             if (view.getVisibility() == View.VISIBLE) {
                 view.setVisibility(View.GONE);
                 ((EditText) findViewById(R.id.main_search_edit_text)).setText("");
-                mExpensesAdapter.clearFilter();
+                mUserAdapter.clearFilter();
             } else {
                 view.setVisibility(View.VISIBLE);
             }
@@ -127,10 +127,15 @@ public class AdminMainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.nav_add_expense:
+            case R.id.nav_add_user:
                 startActivityForResult(
                         new Intent(AdminMainActivity.this, AddExpenseActivity.class),
-                        ADD_EXPENSE_REQUEST_CODE);
+                        ADD_USER_REQUEST_CODE);
+                break;
+            case R.id.nav_account:
+                startActivityForResult(
+                        new Intent(AdminMainActivity.this, EditUserActivity.class),
+                        EDIT_USER_REQUEST_CODE);
                 break;
             case R.id.nav_exit:
                 startActivity(new Intent(AdminMainActivity.this, LoginActivity.class));
@@ -141,7 +146,7 @@ public class AdminMainActivity extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-        return true;
+        return false;
     }
 
 
@@ -150,7 +155,7 @@ public class AdminMainActivity extends AppCompatActivity
         switch (v.getId()) {
             case R.id.clear_search_field:
                 ((EditText) findViewById(R.id.main_search_edit_text)).setText("");
-                mExpensesAdapter.clearFilter();
+                mUserAdapter.clearFilter();
                 break;
 
         }
@@ -161,14 +166,30 @@ public class AdminMainActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
-                case ADD_EXPENSE_REQUEST_CODE:
-                    mExpenses.add(Expense.getFromJson(data.getStringExtra("result")));
-                    mExpensesAdapter.updateList(mExpenses);
+                case ADD_USER_REQUEST_CODE:
+                    mUsers.add(User.getFromJson(data.getStringExtra("result")));
+                    mUserAdapter.updateList(mUsers);
                     break;
-                case EDIT_EXPENSE_REQUEST_CODE:
-                    mExpensesAdapter.updateList(
-                            Expense.getFromJson(data.getStringExtra("result")),
-                            data.getBooleanExtra("deleted", false));
+                case EDIT_USER_REQUEST_CODE:
+                    User editedUser = User.getFromJson(data.getStringExtra("result"));
+                    boolean deleted = data.getBooleanExtra("deleted", false);
+                    if (PrefsHelper.getUser(AdminMainActivity.this).id.equals(editedUser.id)) {
+                        if (deleted) {
+                            startActivity(new Intent(AdminMainActivity.this, LoginActivity.class));
+                            PrefsHelper.clearPrefs(AdminMainActivity.this);
+                            finish();
+                        } else {
+                            PrefsHelper.putUser(AdminMainActivity.this, editedUser);
+                            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+                            navigationView.setNavigationItemSelectedListener(this);
+                            View header = navigationView.getHeaderView(0);
+                            TextView name = (TextView) header.findViewById(R.id.user_name_text_view);
+                            name.setText(editedUser.name);
+
+                        }
+                    } else {
+                        mUserAdapter.updateList(editedUser, deleted);
+                    }
                     break;
             }
         }
@@ -178,29 +199,42 @@ public class AdminMainActivity extends AppCompatActivity
         mExpensesRecyclerView = (RecyclerView) findViewById(R.id.expenses_recycler_view);
         mExpensesRecyclerView.setLayoutManager(new LinearLayoutManager(AdminMainActivity.this));
         mExpensesRecyclerView.setNestedScrollingEnabled(false);
-        mExpenses = new ArrayList<>();
-//        mExpensesAdapter = new ExpensesAdapter(this, mExpenses);
-        mExpensesRecyclerView.setAdapter(mExpensesAdapter);
+        mUsers = new ArrayList<>();
+        mUserAdapter = new UsersAdapter(this, mUsers);
+        mExpensesRecyclerView.setAdapter(mUserAdapter);
     }
 
 
-    private void getExpenses() {
+    private void getUsers() {
 
-        new GetExpensesTask(
+        new GetUsersTask(
                 this,
                 (ProgressBar) findViewById(R.id.main_progress_bar),
                 new OnTaskListener() {
-            @Override
-            public void onSuccess(AsyncTask task, Object result) {
-                mExpenses = (ArrayList<Expense>) result;
-                mExpensesAdapter.updateList(mExpenses);
-            }
+                    @Override
+                    public void onSuccess(AsyncTask task, Object result) {
+                        mUsers = (ArrayList<User>) result;
+                        int myIndex = -1;
+                        User loggedUser = PrefsHelper.getUser(AdminMainActivity.this);
+                        if (loggedUser.type.equals(User.TYPE_ADMIN)) {
+                            for (int i = 0; i < mUsers.size(); i++) {
+                                if (loggedUser.id.equals(mUsers.get(i).id)) {
+                                    myIndex = i;
+                                    break;
+                                }
+                            }
+                            if (myIndex >= 0) {
+                                mUsers.remove(myIndex);
+                            }
+                        }
+                        mUserAdapter.updateList(mUsers);
+                    }
 
-            @Override
-            public void onFailure(AsyncTask task, Object error) {
+                    @Override
+                    public void onFailure(AsyncTask task, Object error) {
 
-            }
-        }).execute();
+                    }
+                }).execute();
     }
 
     private void setupFilterField() {
@@ -209,7 +243,7 @@ public class AdminMainActivity extends AppCompatActivity
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    mExpensesAdapter.getTextFilter().filter(v.getText().toString());
+                    mUserAdapter.getTextFilter().filter(v.getText().toString());
                     InputMethodManager imm = (InputMethodManager) getSystemService(
                             Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(getWindow().getDecorView().getRootView().getWindowToken(), 0);
@@ -227,7 +261,7 @@ public class AdminMainActivity extends AppCompatActivity
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                mExpensesAdapter.getTextFilter().filter(charSequence.toString());
+                mUserAdapter.getTextFilter().filter(charSequence.toString());
             }
 
             @Override

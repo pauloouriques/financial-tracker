@@ -1,7 +1,10 @@
 package com.toptal.app.financialtracker.entities;
 
+import android.content.Context;
+
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
+import com.toptal.app.financialtracker.R;
 
 import java.util.Comparator;
 
@@ -40,4 +43,20 @@ public class User extends BaseEntity{
         }
     }
 
+    /**
+     * Get the corresponding index.
+     * @param context app context.
+     * @return the corresponding index.
+     */
+    public int getCategoryIndex(final Context context) {
+        String[] types = context.getResources()
+                .getStringArray(R.array.user_types);
+
+        for (int i = 0; i < types.length; i++) {
+            if (this.type.toLowerCase().equals(types[i].toLowerCase())) {
+                return i;
+            }
+        }
+        return 0;
+    }
 }

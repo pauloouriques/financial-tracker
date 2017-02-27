@@ -11,8 +11,11 @@ import android.widget.TextView;
 
 import com.toptal.app.financialtracker.R;
 import com.toptal.app.financialtracker.entities.User;
+import com.toptal.app.financialtracker.main.AdminMainActivity;
 import com.toptal.app.financialtracker.main.EditExpenseActivity;
+import com.toptal.app.financialtracker.main.EditUserActivity;
 import com.toptal.app.financialtracker.main.MainActivity;
+import com.toptal.app.financialtracker.persistence.PrefsHelper;
 import com.toptal.app.financialtracker.utils.Constants;
 import com.toptal.app.financialtracker.utils.SharedMethods;
 
@@ -31,10 +34,10 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
     private ArrayList<User> mFilteredUsers = new ArrayList<User>();
     private UserTextFilter mTextFilter;
 
-    private MainActivity mActivity;
+    private AdminMainActivity mActivity;
     private View mFailTextFilterLayout;
 
-    public UsersAdapter(final MainActivity activity, final ArrayList<User> data) {
+    public UsersAdapter(final AdminMainActivity activity, final ArrayList<User> data) {
         Collections.sort(data, new User.nameComparator());
         this.mUsers = data;
         this.mFilteredUsers.addAll(data);
@@ -45,7 +48,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View rootView = LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.expense_item, parent, false);
+                R.layout.user_list_item, parent, false);
         return new ViewHolder(rootView);
     }
 
@@ -58,13 +61,13 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mActivity, EditExpenseActivity.class);
+                Intent intent = new Intent(mActivity, EditUserActivity.class);
                 intent.putExtra(
-                        Constants.EXPENSE_TO_EDIT,
+                        Constants.USER_TO_EDIT,
                         mFilteredUsers.get(position).toJsonString());
                 mActivity.startActivityForResult(
                         intent,
-                        mActivity.EDIT_EXPENSE_REQUEST_CODE);
+                        mActivity.EDIT_USER_REQUEST_CODE);
             }
         });
 

@@ -117,6 +117,35 @@ public class HttpRetrofitClient {
                 @Body User user
         );
 
+        /**
+         * Method to edit a user.
+         *
+         * @return edited user.
+         */
+        @POST("/user/update")
+        Call<User> editUser(
+                @Body User user
+        );
+
+        /**
+         * Method to remove user.
+         *
+         * @return removed user.
+         */
+        @POST("/user/remove")
+        Call<User> removeUser(
+                @Body User user
+        );
+
+        /**
+         * Method to get expenses on the user role.
+         *
+         * @return expenses.
+         */
+        @GET("/user")
+        Call<ArrayList<User>> getUsers();
+
+
     }
 
     /**

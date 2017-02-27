@@ -7,6 +7,10 @@
             android:icon="@drawable/ic_add"
             android:title="@string/drawer_add_expense_text" />
         <item
+            android:id="@+id/nav_account"
+            android:icon="@drawable/ic_account"
+            android:title="@string/drawer_account_text" />
+        <item
             android:id="@+id/nav_exit"
             android:icon="@drawable/ic_exit"
             android:title="@string/drawer_logout_text" />

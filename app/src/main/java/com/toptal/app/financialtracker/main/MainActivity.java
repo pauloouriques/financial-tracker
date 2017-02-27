@@ -30,6 +30,7 @@ import android.widget.TextView;
 import com.toptal.app.financialtracker.R;
 import com.toptal.app.financialtracker.adapters.ExpensesAdapter;
 import com.toptal.app.financialtracker.entities.Expense;
+import com.toptal.app.financialtracker.entities.User;
 import com.toptal.app.financialtracker.login.LoginActivity;
 import com.toptal.app.financialtracker.persistence.PrefsHelper;
 import com.toptal.app.financialtracker.rest.OnTaskListener;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity
 
     public static final int ADD_EXPENSE_REQUEST_CODE = 1201;
     public static final int EDIT_EXPENSE_REQUEST_CODE = 1202;
+    public static final int EDIT_USER_REQUEST_CODE = 1203;
     private RecyclerView mExpensesRecyclerView;
     private ArrayList<Expense> mExpenses;
     private ExpensesAdapter mExpensesAdapter;
@@ -132,6 +134,11 @@ public class MainActivity extends AppCompatActivity
                         new Intent(MainActivity.this, AddExpenseActivity.class),
                         ADD_EXPENSE_REQUEST_CODE);
                 break;
+            case R.id.nav_account:
+                startActivityForResult(
+                        new Intent(MainActivity.this, EditUserActivity.class),
+                        EDIT_USER_REQUEST_CODE);
+                break;
             case R.id.nav_exit:
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 PrefsHelper.clearPrefs(this);
@@ -141,7 +148,7 @@ public class MainActivity extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-        return true;
+        return false;
     }
 
 
@@ -169,6 +176,17 @@ public class MainActivity extends AppCompatActivity
                     mExpensesAdapter.updateList(
                             Expense.getFromJson(data.getStringExtra("result")),
                             data.getBooleanExtra("deleted", false));
+                    break;
+                case EDIT_USER_REQUEST_CODE:
+                    User editedUser = User.getFromJson(data.getStringExtra("result"));
+                    boolean deleted = data.getBooleanExtra("deleted", false);
+                    if (deleted && PrefsHelper.getUser(MainActivity.this).id.equals(editedUser.id)) {
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        PrefsHelper.clearPrefs(MainActivity.this);
+                        finish();
+                    } else {
+                        PrefsHelper.putUser(MainActivity.this, editedUser);
+                    }
                     break;
             }
         }

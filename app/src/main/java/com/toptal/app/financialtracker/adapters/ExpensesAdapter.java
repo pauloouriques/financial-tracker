@@ -119,7 +119,6 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.ViewHo
      * UpdateList.
      */
     public void updateList(final Expense expense, final boolean delete) {
-        System.out.println(delete + "<<<<<<<<<<<<<<<<<<<<<<<<<");
         int indexToUpdate = -1;
         for (int i = 0; i < mFilteredExpenses.size(); i++) {
             if (mFilteredExpenses.get(i).id.equals(expense.id)) {
@@ -204,8 +203,7 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.ViewHo
                 for (final Expense expense : mExpenses) {
                     if (expense.description.toLowerCase().contains(filterPattern.toLowerCase())) {
                         mFilteredExpenses.add(expense);
-                    }
-                    if (expense.comment.toLowerCase().contains(filterPattern.toLowerCase())) {
+                    } else if (expense.comment.toLowerCase().contains(filterPattern.toLowerCase())) {
                         mFilteredExpenses.add(expense);
                     }
                 }

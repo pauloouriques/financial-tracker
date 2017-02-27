@@ -51,7 +51,6 @@
         android:id="@+id/password_confirmation_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/text_spacer"
         android:hint="@string/password_confirmation_hint"
         android:lines="1"
         android:inputType="textPassword"
@@ -59,6 +58,10 @@
         android:singleLine="true"
         android:textColorHint="@color/gray_regular"
         android:textColor="@color/gray_dark" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
 
     <LinearLayout
         android:visibility="gone"
